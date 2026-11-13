@@ -1,37 +1,39 @@
-# Testdebug — Production Status
+# Testdebug — Status
 
-## GitHub (source of truth)
-**https://github.com/cantgetalonggta-png/Testdebug**
+## LIVE VERIFICATION (local production server)
 
-Latest: `714cf40` — Next.js 15.5.4 + React 19 + Tailwind 4 (known-good pins for Vercel)
+| Check | Result |
+|-------|--------|
+| `npm run build` | **SUCCESS** — Next.js 15.5.4, 15 routes |
+| `/api/health` | **200** `{"status":"ok",...}` |
+| `/` home | **200** |
+| `/dashboard` | **200** |
+| `/modules` | **200** |
+| `/services` | **200** |
+| `/settings` | **200** |
+| `/auth/login` | **200** |
+| `/api/services` | **200** |
+| `POST /api/auth/login` demo | **200** authenticated |
 
-## Verified locally
-- `npm run build` **SUCCEEDED** (all 15 routes generated)
-- Routes: `/` `/dashboard` `/modules` `/services` `/settings` `/auth/login` `/auth/signup`
-- APIs: `/api/health` `/api/auth/login` `/api/modules` `/api/services`
-- Interactive UI kit, theme toggle, module toggles, live health, demo auth
+## GitHub
 
-## Deploy to Vercel (1 click)
-1. Open: https://vercel.com/new/clone?repository-url=https://github.com/cantgetalonggta-png/Testdebug
-   OR Import → `cantgetalonggta-png/Testdebug`
-2. Framework: Next.js (auto)
-3. Deploy → production URL
+https://github.com/cantgetalonggta-png/Testdebug  
+Branch: `main`
 
-Alternatively from CLI after `vercel login`:
-```bash
-git clone https://github.com/cantgetalonggta-png/Testdebug.git
-cd Testdebug
-vercel --prod
-```
+## Stack
 
-## Local run
-```bash
-npm install
-npm run build
-npm run start
-# or: npm run dev
-```
-Demo: `demo@testdebug.app` / `demo`
+- Next.js 15.5.4 (App Router) + React 19 + TypeScript
+- Tailwind CSS v4 + PostCSS
+- Full UI: buttons, cards, nav, theme toggle, modules, services, auth
+- APIs: health, services, modules, auth/login
 
-## Note
-Sandbox FS was unreliable for full node_modules; production build was verified on a clean /tmp tree. Cloud build on Vercel will use a clean environment and succeed with the pinned package.json.
+## Deploy
+
+Vercel CLI installed; MCP connector currently **unauthenticated**.  
+**One-click path:** Import `cantgetalonggta-png/Testdebug` in Vercel dashboard (team echo-ec69) → auto production URL.
+
+Local prod: `cd /tmp/testdebug-build && npm start` (artifacts mount has EIO; build runs from /tmp).
+
+## Verified at
+
+2026-11-13T15:18Z UTC
