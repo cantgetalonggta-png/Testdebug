@@ -1,20 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { setDemoAuth } from "@/lib/auth";
 
-export default function LoginPage() {
+type Provider = {
+  id: string;
+  name: string;
+  enabled: boolean;
+  configured: boolean;
+};
+
+function LoginForm() {
   const router = useRouter();
+  const params = useSearchParams();
   const [email, setEmail] = useState("demo@testdebug.app");
   const [password, setPassword] = useState("demo");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const oauthNote =
+    params.get("demo") === "1"
+      ? `OAuth provider "${params.get("oauth")}" not configured — set CLIENT_ID/SECRET env vars.`
+      : null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch("/api/auth/config")
+      .then((r) => r.json())
+      .then((d) => setProviders(d.providers ?? []))
+      .catch(() => {});
+  }, []);
+
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -26,82 +46,100 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error ?? "Login failed");
+        setLoading(false);
         return;
       }
-      setDemoAuth(true);
+      setDemoAuth(true, data.user);
       router.push("/dashboard");
     } catch {
       setError("Network error");
-    } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="mx-auto flex max-w-md flex-col items-center px-4 py-16">
+    <div className="mx-auto flex min-h-[70vh] max-w-md items-center px-4 py-12">
       <Card className="w-full">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Sign in</CardTitle>
+        <CardHeader>
+          <CardTitle>Sign in</CardTitle>
           <CardDescription>
-            Demo credentials pre-filled. OAuth providers can be wired via Auth.js / Clerk / Supabase.
+            Demo credentials or OAuth2 providers (env-gated). Allowlist-ready.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            {error && (
-              <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">
-                {error}
-              </div>
-            )}
-            <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="email">
-                Email
-              </label>
+        <CardContent className="space-y-6">
+          {(error || oauthNote) && (
+            <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100">
+              {error || oauthNote}
+            </div>
+          )}
+
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium">Email</label>
               <input
-                id="email"
+                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
                 required
+                autoComplete="username"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="password">
-                Password
-              </label>
+            <div>
+              <label className="mb-1 block text-sm font-medium">Password</label>
               <input
-                id="password"
+                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
                 required
+                autoComplete="current-password"
               />
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-3">
-            <Button type="submit" className="w-full" loading={loading}>
-              Sign in
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing in…" : "Sign in"}
             </Button>
-            <div className="flex w-full gap-2">
-              <Button type="button" variant="outline" className="flex-1" disabled>
-                Google (OAuth)
-              </Button>
-              <Button type="button" variant="outline" className="flex-1" disabled>
-                GitHub (OAuth)
-              </Button>
+          </form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
             </div>
-            <p className="text-center text-sm text-zinc-500">
-              No account?{" "}
-              <Link href="/auth/signup" className="font-medium text-zinc-900 underline dark:text-zinc-50">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-zinc-500 dark:bg-zinc-950">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="grid gap-2">
+            {providers.map((p) => (
+              <a key={p.id} href={`/api/oauth/${p.id}`}>
+                <Button type="button" variant="outline" className="w-full" disabled={!p.enabled}>
+                  {p.name}
+                  {!p.configured && (
+                    <span className="ml-2 text-xs text-zinc-400">(demo / not configured)</span>
+                  )}
+                </Button>
+              </a>
+            ))}
+          </div>
+
+          <p className="text-center text-sm text-zinc-500">
+            No account?{" "}
+            <Link href="/auth/signup" className="font-medium text-zinc-900 underline dark:text-zinc-100">
+              Sign up
+            </Link>
+          </p>
+        </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-12 text-center text-sm text-zinc-500">Loading…</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

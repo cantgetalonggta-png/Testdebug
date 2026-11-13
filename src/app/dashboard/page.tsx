@@ -1,111 +1,126 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate } from "@/lib/utils";
+import { getStoredUser, isAuthenticated } from "@/lib/auth";
 
-type Metric = { label: string; value: string | number; delta?: string };
+type StatusPayload = {
+  overall?: string;
+  health?: { status: string; version: string; region: string | null; summary?: { passed: number; total: number } };
+  modules?: { count: number; enabled: number };
+  deployment?: { vercel?: boolean; env?: string; region?: string | null; url?: string | null };
+};
 
 export default function DashboardPage() {
-  const [metrics, setMetrics] = useState<Metric[]>([
-    { label: "Active Sessions", value: 12, delta: "+3" },
-    { label: "API Latency", value: "42ms", delta: "-8ms" },
-    { label: "Modules Enabled", value: 4, delta: "+1" },
-    { label: "Build Status", value: "Ready", delta: "ok" },
-  ]);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
-  const [counter, setCounter] = useState(0);
-  const [logs, setLogs] = useState<string[]>([
-    `[${formatDate(new Date())}] Dashboard mounted`,
-  ]);
+  const [status, setStatus] = useState<StatusPayload | null>(null);
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
+  const [clicks, setClicks] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
-  const refresh = () => {
-    setMetrics((m) =>
-      m.map((item) =>
-        item.label === "Active Sessions"
-          ? { ...item, value: Math.floor(Math.random() * 30) + 5 }
-          : item.label === "API Latency"
-          ? { ...item, value: `${Math.floor(Math.random() * 80) + 20}ms` }
-          : item
-      )
-    );
-    const now = new Date();
-    setLastRefresh(now);
-    setLogs((l) => [`[${formatDate(now)}] Metrics refreshed`, ...l].slice(0, 8));
+  const load = async () => {
+    try {
+      const res = await fetch("/api/status", { cache: "no-store" });
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      setStatus(await res.json());
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "load failed");
+    }
   };
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setCounter((c) => c + 1);
-    }, 1000);
+    if (isAuthenticated()) setUser(getStoredUser());
+    load();
+    const t = setInterval(load, 15000);
     return () => clearInterval(t);
   }, []);
 
+  const cards = [
+    {
+      title: "Health",
+      value: status?.health?.status ?? "…",
+      desc: status?.health
+        ? `${status.health.summary?.passed ?? "?"}/${status.health.summary?.total ?? "?"} checks · ${status.health.version}`
+        : "Loading",
+      href: "/api/health",
+    },
+    {
+      title: "Modules",
+      value: status?.modules ? `${status.modules.enabled}/${status.modules.count}` : "…",
+      desc: "Enabled modules",
+      href: "/modules",
+    },
+    {
+      title: "Deploy",
+      value: status?.deployment?.vercel ? "Vercel" : "Local",
+      desc: status?.deployment?.region ?? status?.deployment?.env ?? "—",
+      href: "/services",
+    },
+    {
+      title: "Session",
+      value: user ? "Signed in" : "Guest",
+      desc: user?.email ?? "demo@testdebug.app",
+      href: "/auth/login",
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-zinc-500">Live controls and status · last refresh {formatDate(lastRefresh)}</p>
+          <p className="text-zinc-500">
+            Live metrics from /api/status · auto-refresh 15s
+            {error ? ` · error: ${error}` : ""}
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={refresh}>Refresh metrics</Button>
-          <Button variant="outline" onClick={() => setLogs([])}>
-            Clear logs
+          <Button variant="outline" onClick={load}>
+            Refresh
           </Button>
+          <Link href="/debug">
+            <Button variant="secondary">Smoke tests</Button>
+          </Link>
+          <Link href="/services">
+            <Button>Services</Button>
+          </Link>
         </div>
       </div>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((m) => (
-          <Card key={m.label}>
-            <CardHeader className="pb-2">
-              <CardDescription>{m.label}</CardDescription>
-              <CardTitle className="text-2xl">{m.value}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <span className="text-xs text-emerald-600 dark:text-emerald-400">{m.delta}</span>
-            </CardContent>
-          </Card>
+        {cards.map((c) => (
+          <Link key={c.title} href={c.href}>
+            <Card className="h-full transition hover:border-zinc-400 dark:hover:border-zinc-600">
+              <CardHeader>
+                <CardDescription>{c.title}</CardDescription>
+                <CardTitle className="text-2xl capitalize">{c.value}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-zinc-500">{c.desc}</CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Interactive controls</CardTitle>
-            <CardDescription>All buttons are fully functional</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-3">
-            <Button onClick={() => setCounter((c) => c + 1)}>Increment ({counter})</Button>
-            <Button variant="secondary" onClick={() => setCounter(0)}>
-              Reset
-            </Button>
-            <Button variant="outline" onClick={refresh}>
-              Force refresh
-            </Button>
-            <Button variant="destructive" onClick={() => setLogs((l) => ["[alert] Manual trigger", ...l])}>
-              Emit alert
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Activity log</CardTitle>
-            <CardDescription>Recent events</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-1 font-mono text-xs text-zinc-600 dark:text-zinc-400">
-              {logs.length === 0 && <li>No events</li>}
-              {logs.map((line, i) => (
-                <li key={i}>{line}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Interactive control</CardTitle>
+          <CardDescription>Every button must work — counter + navigation</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-3">
+          <Button onClick={() => setClicks((n) => n + 1)}>Click me ({clicks})</Button>
+          <Button variant="outline" onClick={() => setClicks(0)}>
+            Reset
+          </Button>
+          <Link href="/modules">
+            <Button variant="secondary">Open modules</Button>
+          </Link>
+          <Link href="/settings">
+            <Button variant="ghost">Settings</Button>
+          </Link>
+        </CardContent>
+      </Card>
     </div>
   );
 }

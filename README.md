@@ -1,52 +1,46 @@
-# Testdebug — Production Frontend
+# Testdebug
 
-Full production-ready Next.js (App Router) frontend with:
+Full production-ready Next.js frontend — UI kit, modules, services, health APIs, OAuth scaffolding, Vercel deployment.
 
-- Working interactive buttons, counters, toggles
-- Modules page (enable/disable feature modules)
-- Services page with live health checks against real API routes
-- Auth scaffolding (login / signup / session helpers) ready for OAuth / OAuth2 providers
-- Dashboard with live metrics and activity log
-- Settings (theme, preferences, account)
-- API routes: `/api/health`, `/api/auth/login`, `/api/modules`
-- Tailwind CSS 4 + dark mode
-- Vercel deployment ready
+## Stack
+
+- Next.js 15.5.29 (App Router) · React 19 · TypeScript · Tailwind CSS v4
+- Production health: `/api/health`, `/live`, `/ready`, `/deep`
+- Modules CRUD toggles · Services probes · Auth + OAuth2 placeholders · Allowlist
 
 ## Quick start
 
 ```bash
-cd testdebug
 npm install
 npm run dev
+# production
+npm run build && npm start
 ```
-
-Open http://localhost:3000
 
 Demo login: `demo@testdebug.app` / `demo`
 
+## Key routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | Landing |
+| `/dashboard` | Live metrics from `/api/status` |
+| `/modules` | API-backed module toggles |
+| `/services` | Live health probes + JSON |
+| `/debug` | Full API smoke suite |
+| `/auth/login` | Credentials + OAuth buttons |
+| `/settings` | Theme / prefs |
+| `/api/health` | Production health report |
+
+## Deploy (Vercel + GitHub)
+
+1. Repo: https://github.com/cantgetalonggta-png/Testdebug  
+2. Import in Vercel (or claim temporary deploy)  
+3. Push to `main` → production auto-deploy  
+4. Optional env: see `.env.example`
+
 ## Scripts
 
-- `npm run dev` — development server
-- `npm run build` — production build
-- `npm run start` — start production server
-- `npm run lint` — ESLint
-- `npm run typecheck` — TypeScript check
-
-## Deploy to Vercel
-
-```bash
-npx vercel --prod
-```
-
-Or connect the Git repository in the Vercel dashboard. Framework is auto-detected as Next.js.
-
-## Structure
-
-```
-src/
-  app/           # App Router pages + API routes
-  components/    # UI + layout components
-  lib/           # utils, auth helpers
-```
-
-All primary buttons, links, forms, and service pings are functional.
+- `npm run build` — production build  
+- `npm run typecheck` — `tsc --noEmit`  
+- `npm run lint` — ESLint  

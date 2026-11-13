@@ -13,6 +13,7 @@ const navItems = [
   { href: "/modules", label: "Modules" },
   { href: "/services", label: "Services" },
   { href: "/settings", label: "Settings" },
+  { href: "/debug", label: "Debug" },
 ];
 
 export function Navbar() {

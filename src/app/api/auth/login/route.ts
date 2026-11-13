@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isEmailAllowed } from "@/lib/oauth-config";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,10 @@ export async function POST(req: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
+
+    if (!isEmailAllowed(user.email)) {
+      return NextResponse.json({ error: "Email not on allowlist" }, { status: 403 });
     }
 
     const res = NextResponse.json({

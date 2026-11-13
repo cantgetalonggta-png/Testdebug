@@ -1,8 +1,6 @@
 /**
  * Auth service scaffolding for OAuth / OAuth2 / credentials.
  * Ready for Auth.js (NextAuth), Clerk, Supabase Auth, or custom OAuth providers.
- * Environment variables expected:
- *   AUTH_SECRET, NEXTAUTH_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, etc.
  */
 
 export type User = {
@@ -27,7 +25,6 @@ const DEMO_USER: User = {
   image: undefined,
 };
 
-/** Client-side session helper (replace with real auth provider) */
 export function getDemoSession(): Session {
   return {
     user: DEMO_USER,
@@ -36,16 +33,24 @@ export function getDemoSession(): Session {
 }
 
 export function isAuthenticated(): boolean {
-  // In production this checks real session / JWT / cookie
   if (typeof window === "undefined") return false;
   return localStorage.getItem("testdebug_session") === "1";
 }
 
-export function setDemoAuth(loggedIn: boolean) {
+export function setDemoAuth(loggedIn: boolean, user?: User | null) {
   if (typeof window === "undefined") return;
   if (loggedIn) {
     localStorage.setItem("testdebug_session", "1");
-    localStorage.setItem("testdebug_user", JSON.stringify(DEMO_USER));
+    const u = user
+      ? {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: (user.role as User["role"]) || "user",
+          image: user.image,
+        }
+      : DEMO_USER;
+    localStorage.setItem("testdebug_user", JSON.stringify(u));
   } else {
     localStorage.removeItem("testdebug_session");
     localStorage.removeItem("testdebug_user");
