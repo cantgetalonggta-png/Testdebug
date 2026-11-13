@@ -1,33 +1,30 @@
-# Testdebug — LIVE (Health Module Production)
+# Testdebug — LIVE (OAuth + Health + Smoke)
 
-## New temporary deployment (claim within ~59 min)
+## Latest temporary URL (claim ~59m)
 
-**URL:** https://sonic-iron-3p01ecq.tmp.now  
-**Claim:** https://vercel.com/claim-deployment?code=c4330648-8058-4b57-86da-b5de8c2f7bc6
+**https://prompt-gorge-jurt0cc.tmp.now**  
+Claim: https://vercel.com/claim-deployment?code=fd82d4d3-bed5-4b9b-beca-c8aea1b3354b
 
-Previous (claimed): https://fleet-ochre-auyuksg.tmp.now
+Also claimed earlier: sonic-iron / fleet-ochre (user linked GitHub on Vercel).
 
-## Production Health Module
+## GitHub → Vercel
 
-| Endpoint | Purpose | Status |
-|----------|---------|--------|
-| `GET/HEAD /api/health` | Full process + dependency checks | 200 |
-| `GET/HEAD /api/health/live` | Liveness (k8s-style) | 200 |
-| `GET/HEAD /api/health/ready` | Readiness (deps) | 200 |
-| `GET /api/health/deep` | Deep report + requestId | 200 |
-| `GET /api/status` | Aggregate health + modules + deploy | 200 |
-| `GET /api/services` | Service registry with probes | 200 |
-| `GET/PATCH /api/modules` | Module registry + toggles | 200 |
-| `POST /api/auth/login` | Demo auth + session cookie | 200 |
-| `GET /api/auth/session` | Session | 200 |
-| `POST /api/auth/logout` | Logout | 200 |
+Repo: https://github.com/cantgetalonggta-png/Testdebug  
+Latest commit: `484e565` (OAuth + debug + CI)  
+Push to `main` triggers Vercel production if project is linked.
 
-## GitHub
+## Verified endpoints (200)
 
-https://github.com/cantgetalonggta-png/Testdebug  
-Commit: production health module (live/ready/deep)
+- `/api/health` (+ live/ready/deep)
+- `/api/status` · `/api/services` · `/api/modules` (PATCH)
+- `/api/auth/login|session|logout|config`
+- `/api/oauth/{google,github,discord}`
+- Pages: `/` `/dashboard` `/modules` `/services` `/settings` `/debug` `/auth/login`
 
-## Permanent options
-1. Claim temporary link above
-2. Import GitHub repo in Vercel dashboard (echo-ec69)
-3. `vercel login` then `vercel --prod` from clone
+## Demo
+
+Email: `demo@testdebug.app` · Password: `demo`
+
+## CI
+
+`.github/workflows/ci.yml` — npm ci + build on push/PR to main
