@@ -1,30 +1,33 @@
-# Testdebug — LIVE (OAuth + Health + Smoke)
+# Testdebug — Production Status
 
-## Latest temporary URL (claim ~59m)
+## Live
 
-**https://prompt-gorge-jurt0cc.tmp.now**  
-Claim: https://vercel.com/claim-deployment?code=fd82d4d3-bed5-4b9b-beca-c8aea1b3354b
+**https://prompt-gorge-jurt0cc.tmp.now** (temporary; claim if still active)
 
-Also claimed earlier: sonic-iron / fleet-ochre (user linked GitHub on Vercel).
+GitHub: https://github.com/cantgetalonggta-png/Testdebug  
+Latest main: middleware + settings + admin (`35f4e96`)
 
-## GitHub → Vercel
+## Verified
 
-Repo: https://github.com/cantgetalonggta-png/Testdebug  
-Latest commit: `484e565` (OAuth + debug + CI)  
-Push to `main` triggers Vercel production if project is linked.
+| Surface | Status |
+|---------|--------|
+| `/api/health` (+ live/ready/deep) | 200 · 8/8 checks |
+| `/api/status` · services · modules | 200 |
+| Auth login/session/config + OAuth routes | 200 |
+| Pages: home, dashboard, modules, services, settings, debug, admin, login | 200 |
+| CI on main | success (prior runs) |
+| Production build | Next 15.5.29 · middleware present |
 
-## Verified endpoints (200)
+## Stack
 
-- `/api/health` (+ live/ready/deep)
-- `/api/status` · `/api/services` · `/api/modules` (PATCH)
-- `/api/auth/login|session|logout|config`
-- `/api/oauth/{google,github,discord}`
-- Pages: `/` `/dashboard` `/modules` `/services` `/settings` `/debug` `/auth/login`
+Next.js 15.5.29 · React 19 · Tailwind 4 · TypeScript  
+Security headers middleware · error/404 boundaries · OAuth scaffolding · allowlist
 
 ## Demo
 
-Email: `demo@testdebug.app` · Password: `demo`
+`demo@testdebug.app` / `demo`
 
-## CI
+## Permanent deploy
 
-`.github/workflows/ci.yml` — npm ci + build on push/PR to main
+Vercel project linked to GitHub → push to `main` auto-deploys.  
+Check Vercel dashboard for production `*.vercel.app` URL.
