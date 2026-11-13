@@ -1,39 +1,31 @@
-# Testdebug — Status
+# Testdebug — LIVE
 
-## LIVE VERIFICATION (local production server)
+## Production temporary deployment (claim within 48m)
 
-| Check | Result |
+**URL:** https://fleet-ochre-auyuksg.tmp.now  
+**Claim:** https://vercel.com/claim-deployment?code=6b260cd8-0acb-4d14-a797-4a7e880a0e4f
+
+## Smoke (live)
+
+| Route | Status |
 |-------|--------|
-| `npm run build` | **SUCCESS** — Next.js 15.5.4, 15 routes |
-| `/api/health` | **200** `{"status":"ok",...}` |
-| `/` home | **200** |
-| `/dashboard` | **200** |
-| `/modules` | **200** |
-| `/services` | **200** |
-| `/settings` | **200** |
-| `/auth/login` | **200** |
-| `/api/services` | **200** |
-| `POST /api/auth/login` demo | **200** authenticated |
+| `/api/health` | 200 ok |
+| `/` `/dashboard` `/modules` `/services` `/settings` | 200 |
+| `/auth/login` `/auth/signup` | 200 |
+| `POST /api/auth/login` demo | authenticated |
 
 ## GitHub
 
 https://github.com/cantgetalonggta-png/Testdebug  
-Branch: `main`
+Next.js **15.5.29** (CVE-2025-66478 patched)
+
+## Permanent deploy
+
+1. Claim the temporary deployment link above, **or**
+2. Import repo in Vercel dashboard (team echo-ec69) — auto deploys on push
+3. Re-auth Vercel MCP connector for fully automated future deploys
 
 ## Stack
 
-- Next.js 15.5.4 (App Router) + React 19 + TypeScript
-- Tailwind CSS v4 + PostCSS
-- Full UI: buttons, cards, nav, theme toggle, modules, services, auth
-- APIs: health, services, modules, auth/login
-
-## Deploy
-
-Vercel CLI installed; MCP connector currently **unauthenticated**.  
-**One-click path:** Import `cantgetalonggta-png/Testdebug` in Vercel dashboard (team echo-ec69) → auto production URL.
-
-Local prod: `cd /tmp/testdebug-build && npm start` (artifacts mount has EIO; build runs from /tmp).
-
-## Verified at
-
-2026-11-13T15:18Z UTC
+Next 15.5.29 · React 19 · Tailwind 4 · TypeScript · App Router  
+Full UI kit, modules, services, OAuth-ready auth, health APIs
