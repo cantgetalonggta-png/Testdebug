@@ -1,33 +1,29 @@
-# Testdebug — Production Status
+# Testdebug — LIVE
 
-## Live
+## Latest temporary (claim ~59m)
 
-**https://prompt-gorge-jurt0cc.tmp.now** (temporary; claim if still active)
+**https://instant-mauve-x7w6lps.tmp.now**  
+Claim: https://vercel.com/claim-deployment?code=732ff855-84c3-469d-9c9e-bfa98dae6683
 
-GitHub: https://github.com/cantgetalonggta-png/Testdebug  
-Latest main: middleware + settings + admin (`35f4e96`)
+## GitHub
 
-## Verified
+https://github.com/cantgetalonggta-png/Testdebug · production frontend + health + OAuth + env readiness
 
-| Surface | Status |
-|---------|--------|
-| `/api/health` (+ live/ready/deep) | 200 · 8/8 checks |
-| `/api/status` · services · modules | 200 |
-| Auth login/session/config + OAuth routes | 200 |
-| Pages: home, dashboard, modules, services, settings, debug, admin, login | 200 |
-| CI on main | success (prior runs) |
-| Production build | Next 15.5.29 · middleware present |
+## Env system
 
-## Stack
+- `/api/env` — set/unset flags only (never secret values)
+- Settings page shows readiness by group (app/auth/oauth/data/deploy)
+- `.env.example` documents all keys
+- Set secrets in Vercel Project → Settings → Environment Variables (do not commit)
 
-Next.js 15.5.29 · React 19 · Tailwind 4 · TypeScript  
-Security headers middleware · error/404 boundaries · OAuth scaffolding · allowlist
+## Verified live (200)
+
+`/api/health` · `/api/env` · `/api/status` · `/api/auth/config` · `/settings` · `/debug` · `/admin` · `/dashboard`
+
+## Features
+
+Health live/ready/deep · Modules PATCH · Services probes · OAuth scaffold · Allowlist · Debug smoke · Admin · Middleware (permanent Vercel) · CI
 
 ## Demo
 
 `demo@testdebug.app` / `demo`
-
-## Permanent deploy
-
-Vercel project linked to GitHub → push to `main` auto-deploys.  
-Check Vercel dashboard for production `*.vercel.app` URL.
