@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -10,28 +10,56 @@ type Module = {
   description: string;
   enabled: boolean;
   version: string;
+  category?: string;
 };
 
-const initialModules: Module[] = [
-  { id: "auth", name: "Auth Module", description: "OAuth / OAuth2 / credentials scaffolding", enabled: true, version: "1.2.0" },
-  { id: "analytics", name: "Analytics", description: "Event tracking and dashboard metrics", enabled: true, version: "0.9.1" },
-  { id: "notifications", name: "Notifications", description: "In-app and push notification service", enabled: false, version: "0.4.0" },
-  { id: "billing", name: "Billing", description: "Stripe-ready billing hooks (placeholder)", enabled: false, version: "0.1.0" },
-  { id: "search", name: "Search", description: "Full-text and semantic search layer", enabled: true, version: "1.0.3" },
-  { id: "admin", name: "Admin Console", description: "Role-based admin controls", enabled: true, version: "1.1.0" },
-];
-
 export default function ModulesPage() {
-  const [modules, setModules] = useState(initialModules);
+  const [modules, setModules] = useState<Module[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const toggle = (id: string) => {
-    setModules((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, enabled: !m.enabled } : m))
-    );
+  const load = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/modules", { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setModules(data.modules ?? []);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load modules");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const enableAll = () => setModules((p) => p.map((m) => ({ ...m, enabled: true })));
-  const disableAll = () => setModules((p) => p.map((m) => ({ ...m, enabled: false })));
+  useEffect(() => {
+    load();
+  }, []);
+
+  const toggle = async (id: string, enabled: boolean) => {
+    const res = await fetch("/api/modules", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, enabled: !enabled }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setModules((prev) => prev.map((m) => (m.id === id ? data.module : m)));
+    }
+  };
+
+  const bulk = async (action: "enable_all" | "disable_all") => {
+    const res = await fetch("/api/modules", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setModules(data.modules ?? []);
+    }
+  };
 
   const enabledCount = modules.filter((m) => m.enabled).length;
 
@@ -41,18 +69,27 @@ export default function ModulesPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Modules</h1>
           <p className="text-zinc-500">
-            {enabledCount} of {modules.length} modules enabled
+            {loading ? "Loading…" : `${enabledCount} of ${modules.length} modules enabled · live API`}
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={enableAll}>
+          <Button variant="outline" onClick={load}>
+            Refresh
+          </Button>
+          <Button variant="outline" onClick={() => bulk("enable_all")}>
             Enable all
           </Button>
-          <Button variant="outline" onClick={disableAll}>
+          <Button variant="outline" onClick={() => bulk("disable_all")}>
             Disable all
           </Button>
         </div>
       </div>
+
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
+          {error}
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {modules.map((m) => (
@@ -73,11 +110,14 @@ export default function ModulesPage() {
               <CardDescription>{m.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <span className="font-mono text-xs text-zinc-500">v{m.version}</span>
+              <span className="font-mono text-xs text-zinc-500">
+                v{m.version}
+                {m.category ? ` · ${m.category}` : ""}
+              </span>
               <Button
                 size="sm"
                 variant={m.enabled ? "secondary" : "default"}
-                onClick={() => toggle(m.id)}
+                onClick={() => toggle(m.id, m.enabled)}
               >
                 {m.enabled ? "Disable" : "Enable"}
               </Button>

@@ -1,18 +1,35 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { listModules, toggleModule, setAll } from "@/lib/modules-store";
 
-const modules = [
-  { id: "auth", name: "Auth Module", enabled: true, version: "1.2.0" },
-  { id: "analytics", name: "Analytics", enabled: true, version: "0.9.1" },
-  { id: "notifications", name: "Notifications", enabled: false, version: "0.4.0" },
-  { id: "billing", name: "Billing", enabled: false, version: "0.1.0" },
-  { id: "search", name: "Search", enabled: true, version: "1.0.3" },
-  { id: "admin", name: "Admin Console", enabled: true, version: "1.1.0" },
-];
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET() {
+  const modules = listModules();
   return NextResponse.json({
     modules,
     count: modules.length,
     enabled: modules.filter((m) => m.enabled).length,
+    timestamp: new Date().toISOString(),
   });
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    if (body?.action === "enable_all") {
+      return NextResponse.json({ modules: setAll(true), ok: true });
+    }
+    if (body?.action === "disable_all") {
+      return NextResponse.json({ modules: setAll(false), ok: true });
+    }
+    if (!body?.id) {
+      return NextResponse.json({ error: "id required" }, { status: 400 });
+    }
+    const updated = toggleModule(body.id, body.enabled);
+    if (!updated) return NextResponse.json({ error: "module not found" }, { status: 404 });
+    return NextResponse.json({ module: updated, ok: true });
+  } catch {
+    return NextResponse.json({ error: "invalid body" }, { status: 400 });
+  }
 }

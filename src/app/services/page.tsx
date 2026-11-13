@@ -12,12 +12,19 @@ type Service = {
   endpoint: string;
   status: ServiceStatus;
   latency?: number;
+  preview?: string;
 };
 
-const baseServices: Omit<Service, "status" | "latency">[] = [
+const baseServices: Omit<Service, "status" | "latency" | "preview">[] = [
   { id: "health", name: "Health API", endpoint: "/api/health" },
+  { id: "live", name: "Liveness", endpoint: "/api/health/live" },
+  { id: "ready", name: "Readiness", endpoint: "/api/health/ready" },
+  { id: "deep", name: "Deep Health", endpoint: "/api/health/deep" },
+  { id: "status", name: "Status Aggregate", endpoint: "/api/status" },
   { id: "auth", name: "Auth Login API", endpoint: "/api/auth/login" },
+  { id: "session", name: "Session API", endpoint: "/api/auth/session" },
   { id: "modules", name: "Modules API", endpoint: "/api/modules" },
+  { id: "services", name: "Services API", endpoint: "/api/services" },
   { id: "frontend", name: "Frontend App", endpoint: "/" },
 ];
 
@@ -26,6 +33,7 @@ export default function ServicesPage() {
     baseServices.map((s) => ({ ...s, status: "checking" as ServiceStatus }))
   );
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
+  const [healthJson, setHealthJson] = useState<string>("");
 
   const checkAll = async () => {
     setServices((prev) => prev.map((s) => ({ ...s, status: "checking" as ServiceStatus })));
@@ -35,10 +43,19 @@ export default function ServicesPage() {
         try {
           const res = await fetch(s.endpoint, { cache: "no-store" });
           const latency = Math.round(performance.now() - start);
+          let preview: string | undefined;
+          try {
+            const text = await res.text();
+            preview = text.slice(0, 120);
+            if (s.id === "health") setHealthJson(text);
+          } catch {
+            /* ignore */
+          }
           return {
             ...s,
             status: (res.ok ? "healthy" : "degraded") as ServiceStatus,
             latency,
+            preview,
           };
         } catch {
           return {
@@ -76,11 +93,31 @@ export default function ServicesPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Services</h1>
           <p className="text-zinc-500">
-            Live health checks · {lastCheck ? `checked ${lastCheck.toLocaleTimeString()}` : "checking…"}
+            Production health probes · {lastCheck ? `checked ${lastCheck.toLocaleTimeString()}` : "checking…"}
           </p>
         </div>
         <Button onClick={checkAll}>Re-check all</Button>
       </div>
+
+      {healthJson && (
+        <Card className="mb-6 border-emerald-300 dark:border-emerald-800">
+          <CardHeader>
+            <CardTitle className="text-base">/api/health response</CardTitle>
+            <CardDescription>Live production health report</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre className="max-h-64 overflow-auto rounded-lg bg-zinc-950 p-4 text-xs text-emerald-300">
+              {(() => {
+                try {
+                  return JSON.stringify(JSON.parse(healthJson), null, 2);
+                } catch {
+                  return healthJson;
+                }
+              })()}
+            </pre>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         {services.map((s) => (
@@ -94,34 +131,48 @@ export default function ServicesPage() {
               </div>
               <CardDescription className="font-mono text-xs">{s.endpoint}</CardDescription>
             </CardHeader>
-            <CardContent className="flex items-center justify-between">
+            <CardContent className="flex items-center justify-between gap-2">
               <span className="text-sm text-zinc-500">
                 {s.latency != null ? `${s.latency} ms` : "—"}
               </span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={async () => {
-                  const start = performance.now();
-                  try {
-                    const res = await fetch(s.endpoint, { cache: "no-store" });
-                    const latency = Math.round(performance.now() - start);
-                    setServices((prev) =>
-                      prev.map((x) =>
-                        x.id === s.id
-                          ? { ...x, status: res.ok ? "healthy" : "degraded", latency }
-                          : x
-                      )
-                    );
-                  } catch {
-                    setServices((prev) =>
-                      prev.map((x) => (x.id === s.id ? { ...x, status: "down", latency: undefined } : x))
-                    );
-                  }
-                }}
-              >
-                Ping
-              </Button>
+              <div className="flex gap-2">
+                <a href={s.endpoint} target="_blank" rel="noreferrer">
+                  <Button size="sm" variant="ghost">
+                    Open
+                  </Button>
+                </a>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={async () => {
+                    const start = performance.now();
+                    try {
+                      const res = await fetch(s.endpoint, { cache: "no-store" });
+                      const latency = Math.round(performance.now() - start);
+                      const text = await res.text();
+                      if (s.id === "health") setHealthJson(text);
+                      setServices((prev) =>
+                        prev.map((x) =>
+                          x.id === s.id
+                            ? {
+                                ...x,
+                                status: res.ok ? "healthy" : "degraded",
+                                latency,
+                                preview: text.slice(0, 120),
+                              }
+                            : x
+                        )
+                      );
+                    } catch {
+                      setServices((prev) =>
+                        prev.map((x) => (x.id === s.id ? { ...x, status: "down", latency: undefined } : x))
+                      );
+                    }
+                  }}
+                >
+                  Ping
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
