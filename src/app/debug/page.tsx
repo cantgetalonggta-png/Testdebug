@@ -13,6 +13,7 @@ const ENDPOINTS = [
   "/api/services",
   "/api/modules",
   "/api/auth/config",
+  "/api/env",
   "/api/auth/session",
   "/api/auth/login",
   "/api/oauth/google",
