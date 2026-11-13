@@ -1,31 +1,33 @@
-# Testdebug — LIVE
+# Testdebug — LIVE (Health Module Production)
 
-## Production temporary deployment (claim within 48m)
+## New temporary deployment (claim within ~59 min)
 
-**URL:** https://fleet-ochre-auyuksg.tmp.now  
-**Claim:** https://vercel.com/claim-deployment?code=6b260cd8-0acb-4d14-a797-4a7e880a0e4f
+**URL:** https://sonic-iron-3p01ecq.tmp.now  
+**Claim:** https://vercel.com/claim-deployment?code=c4330648-8058-4b57-86da-b5de8c2f7bc6
 
-## Smoke (live)
+Previous (claimed): https://fleet-ochre-auyuksg.tmp.now
 
-| Route | Status |
-|-------|--------|
-| `/api/health` | 200 ok |
-| `/` `/dashboard` `/modules` `/services` `/settings` | 200 |
-| `/auth/login` `/auth/signup` | 200 |
-| `POST /api/auth/login` demo | authenticated |
+## Production Health Module
+
+| Endpoint | Purpose | Status |
+|----------|---------|--------|
+| `GET/HEAD /api/health` | Full process + dependency checks | 200 |
+| `GET/HEAD /api/health/live` | Liveness (k8s-style) | 200 |
+| `GET/HEAD /api/health/ready` | Readiness (deps) | 200 |
+| `GET /api/health/deep` | Deep report + requestId | 200 |
+| `GET /api/status` | Aggregate health + modules + deploy | 200 |
+| `GET /api/services` | Service registry with probes | 200 |
+| `GET/PATCH /api/modules` | Module registry + toggles | 200 |
+| `POST /api/auth/login` | Demo auth + session cookie | 200 |
+| `GET /api/auth/session` | Session | 200 |
+| `POST /api/auth/logout` | Logout | 200 |
 
 ## GitHub
 
 https://github.com/cantgetalonggta-png/Testdebug  
-Next.js **15.5.29** (CVE-2025-66478 patched)
+Commit: production health module (live/ready/deep)
 
-## Permanent deploy
-
-1. Claim the temporary deployment link above, **or**
-2. Import repo in Vercel dashboard (team echo-ec69) — auto deploys on push
-3. Re-auth Vercel MCP connector for fully automated future deploys
-
-## Stack
-
-Next 15.5.29 · React 19 · Tailwind 4 · TypeScript · App Router  
-Full UI kit, modules, services, OAuth-ready auth, health APIs
+## Permanent options
+1. Claim temporary link above
+2. Import GitHub repo in Vercel dashboard (echo-ec69)
+3. `vercel login` then `vercel --prod` from clone
