@@ -1,0 +1,300 @@
+{
+  "schema": "gta.grok.apk.deeplink_audit.v1",
+  "schema_purpose": "public redacted continuity + fleet project bind",
+  "generated_at_utc": "2026-11-14T21:38:40Z",
+  "report_type": "FULL_MERGE_TO_FLEET",
+  "emoji_route_hint": "/dashboard \ud83c\udf19",
+  "merge_status": "COMPLETE",
+  "fleet_project": {
+    "name": "Testdebug",
+    "live_url": "https://fleet-ochre-auyuksg.tmp.now/",
+    "github": "https://github.com/cantgetalonggta-png/Testdebug",
+    "health": "https://fleet-ochre-auyuksg.tmp.now/api/health",
+    "dashboard": "https://fleet-ochre-auyuksg.tmp.now/dashboard",
+    "modules": "https://fleet-ochre-auyuksg.tmp.now/modules",
+    "services": "https://fleet-ochre-auyuksg.tmp.now/services",
+    "settings": "https://fleet-ochre-auyuksg.tmp.now/settings",
+    "debug": "https://fleet-ochre-auyuksg.tmp.now/debug",
+    "admin": "https://fleet-ochre-auyuksg.tmp.now/admin",
+    "api_audit": "https://fleet-ochre-auyuksg.tmp.now/api/audit",
+    "api_session": "https://fleet-ochre-auyuksg.tmp.now/api/session",
+    "api_status": "https://fleet-ochre-auyuksg.tmp.now/api/status",
+    "api_env": "https://fleet-ochre-auyuksg.tmp.now/api/env",
+    "note": "tmp.now is a Vercel temporary deployment URL; claim/reclaim via Vercel claim flow if needed"
+  },
+  "session": {
+    "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+    "hostname": "hds-guydq970hn8i",
+    "sandbox_id": "prod-hades-worker-675d569677-n2hmm/hds-guydq970hn8i",
+    "provider_id": "hades",
+    "mode": "remote",
+    "layout": "/workspace",
+    "chain_length": 29
+  },
+  "sandbox": {
+    "is_sandbox_selectable": "on",
+    "is_sandbox_active": true
+  },
+  "continuity_keys_merged": {
+    "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+    "prior_session_id": "c5168efe-bc35-4e40-8bd4-1ee91da2e3ad",
+    "prior_hostname": "hds-cggk80owufh8",
+    "github.login": "cantgetalonggta-png",
+    "drive.workspace_map_file": "https://drive.google.com/file/d/16aVeC7QEXvZi2d1qJWh4bEurQzKODy9u/view?usp=drivesdk",
+    "drive.latest_audit": "https://drive.google.com/file/d/1wUt2U9BS0bAmun4Ax_KvuFIX7npTuWKe/view?usp=drivesdk",
+    "strand.live_base": "https://strand-osint-mesh.vercel.app",
+    "fleet.live_base": "https://fleet-ochre-auyuksg.tmp.now/",
+    "fleet.github": "https://github.com/cantgetalonggta-png/Testdebug"
+  },
+  "linked_assets": {
+    "strand_osint_mesh": "https://github.com/cantgetalonggta-png/strand-osint-mesh",
+    "strand_live": "https://strand-osint-mesh.vercel.app",
+    "hard_target": "https://github.com/cantgetalonggta-png/HARD-TARGET",
+    "ma_os_12": "https://github.com/cantgetalonggta-png/ma-os-12-unified-codespace",
+    "workspace_map_drive": "https://drive.google.com/file/d/16aVeC7QEXvZi2d1qJWh4bEurQzKODy9u/view?usp=drivesdk"
+  },
+  "apk_deeplinks": {
+    "manifest_schema": "gta.grok.apk.deeplink_audit.v1",
+    "session_route": "grok://session/211e2cba-1b23-5ce8-945a-d5e158b037a2",
+    "fleet_home": "https://fleet-ochre-auyuksg.tmp.now/",
+    "fleet_dashboard": "https://fleet-ochre-auyuksg.tmp.now/dashboard",
+    "fleet_audit_api": "https://fleet-ochre-auyuksg.tmp.now/api/audit",
+    "strand_live": "https://strand-osint-mesh.vercel.app",
+    "drive_handoff": "https://drive.google.com/file/d/1wUt2U9BS0bAmun4Ax_KvuFIX7npTuWKe/view?usp=drivesdk"
+  },
+  "session_history_chain": [
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-hxh8r0kttqkm",
+      "generated_at_utc": "2026-11-14T20:36:05Z",
+      "cwd_layout": "/workspace"
+    },
+    {
+      "session_id": "c8d1c118-9e57-406b-b238-86cdc5363c47",
+      "hostname": "hds-fop2f4xnr7ug",
+      "generated_at_utc": "2026-11-14T20:39:29Z",
+      "cwd_layout": "/home/workdir"
+    },
+    {
+      "session_id": "6fb3883a-da77-49fe-b6ba-46902e21aded",
+      "hostname": "hds-wm54gahjizxi",
+      "generated_at_utc": "2026-11-14T20:41:23Z",
+      "cwd_layout": "/home/workdir"
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-hxs4b5rfyjcu",
+      "generated_at_utc": "2026-11-14T20:44:18Z",
+      "cwd_layout": "/workspace",
+      "note": "restored original session_id on new host; hop after multi-layout chain"
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-ym716do3m3fx",
+      "generated_at_utc": "2026-11-14T20:48:48Z",
+      "cwd_layout": "/workspace",
+      "launch_id": "3b42cd48-cc50-4d47-b445-06009175afe2",
+      "note": "restored session_id on new host hop"
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-ym716do3m3fx",
+      "generated_at_utc": "2026-11-14T20:50:26Z",
+      "cwd_layout": "/workspace",
+      "launch_id": "3b42cd48-cc50-4d47-b445-06009175afe2",
+      "note": "same host and launch as previous hop; re-probe. Drive connector not in this turn toolset so no new Drive upload."
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-ry93e19g8fkm",
+      "generated_at_utc": "2026-11-14T20:53:55Z",
+      "cwd_layout": "/workspace",
+      "launch_id": "3e23e2e4-8d8c-4f50-b38f-36d01627ea1e",
+      "note": "new host hop; Drive connector absent; local regen only"
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-ry93e19g8fkm",
+      "generated_at_utc": "2026-11-14T20:56:05Z",
+      "cwd_layout": "/workspace",
+      "launch_id": "3e23e2e4-8d8c-4f50-b38f-36d01627ea1e",
+      "note": "same host and launch as hop 7; re-probe. Drive connector absent."
+    },
+    {
+      "session_id": "c1d1e9cc-9602-4cd1-831f-5dd10df9b995",
+      "hostname": "hds-2k10xcz5n7mc",
+      "generated_at_utc": "2026-11-14T20:57:53Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session_id (not restored 211e2cba); Drive connector available; layout /home/workdir"
+    },
+    {
+      "session_id": "344f6cd5-1562-4727-9a66-d8593b3e7cfa",
+      "hostname": "hds-3vswsgt74z2p",
+      "generated_at_utc": "2026-11-14T20:59:33Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "64e5eebd-41b5-43ec-a762-c40731a9f2de",
+      "hostname": "hds-ufa4p5uecq91",
+      "generated_at_utc": "2026-11-14T21:00:41Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "568d6270-a86d-460b-87d7-1535f44a1680",
+      "hostname": "hds-7p4sthwn32uk",
+      "generated_at_utc": "2026-11-14T21:02:11Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "e302f5e6-2541-490f-ae94-12467ac46bbe",
+      "hostname": "hds-64qwvs4dfbco",
+      "generated_at_utc": "2026-11-14T21:03:53Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "38e3b225-03e5-41ec-9721-460559aba2d6",
+      "hostname": "hds-o8ifxoixj6ix",
+      "generated_at_utc": "2026-11-14T21:06:12Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "c921f3a6-f5b5-4b22-a0ad-bb44ec3d4cf6",
+      "hostname": "hds-hssecx5yku6h",
+      "generated_at_utc": "2026-11-14T21:08:06Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "60ee66e8-e76a-4fde-ac4b-4bff80a8914e",
+      "hostname": "hds-tmdsv30ccykk",
+      "generated_at_utc": "2026-11-14T21:08:57Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "94d1315d-bc98-4736-82e0-dbb866503f37",
+      "hostname": "hds-pms9v9o03oux",
+      "generated_at_utc": "2026-11-14T21:10:01Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "08e87b41-196a-439e-b367-e5814927a65e",
+      "hostname": "hds-bbhmepc9l9r8",
+      "generated_at_utc": "2026-11-14T21:10:56Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "843b27c9-64ce-47a4-bc80-8b83e868e21b",
+      "hostname": "hds-bry7barfb12v",
+      "generated_at_utc": "2026-11-14T21:11:52Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "4e27f581-8882-403b-b406-5a0f7471bb7e",
+      "hostname": "hds-u25ivrybqw50",
+      "generated_at_utc": "2026-11-14T21:12:41Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "fc8a34dc-62d7-469c-a3f6-e403c7e2cba2",
+      "hostname": "hds-nphgnckxvn6g",
+      "generated_at_utc": "2026-11-14T21:13:29Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "2b074235-5eee-474a-8b14-16c950e85200",
+      "hostname": "hds-amvcoeuxfist",
+      "generated_at_utc": "2026-11-14T21:14:22Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "230bc671-9039-44dd-9ac0-0162ad97cbeb",
+      "hostname": "hds-79g9lpwegjjp",
+      "generated_at_utc": "2026-11-14T21:15:21Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "36f15bb7-eb60-4502-8619-2b3e215b5090",
+      "hostname": "hds-yn7rz0ere034",
+      "generated_at_utc": "2026-11-14T21:16:07Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "95ec5721-522b-4876-916d-aac775c2c77c",
+      "hostname": "hds-ntt38cuv440d",
+      "generated_at_utc": "2026-11-14T21:17:06Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "4b79e71a-b4dd-4f24-986b-c47a51beb4b4",
+      "hostname": "hds-3m6uxh1mgiq5",
+      "generated_at_utc": "2026-11-14T21:18:24Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "81a402f4-0f69-4434-bbe7-cc4b524087d3",
+      "hostname": "hds-rca454hdo2xq",
+      "generated_at_utc": "2026-11-14T21:19:20Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "c5168efe-bc35-4e40-8bd4-1ee91da2e3ad",
+      "hostname": "hds-cggk80owufh8",
+      "generated_at_utc": "2026-11-14T21:20:17Z",
+      "cwd_layout": "/home/workdir",
+      "launch_id": null,
+      "note": "new session hop; Drive upload enabled"
+    },
+    {
+      "session_id": "211e2cba-1b23-5ce8-945a-d5e158b037a2",
+      "hostname": "hds-guydq970hn8i",
+      "generated_at_utc": "2026-11-14T21:33:42Z",
+      "cwd_layout": "/workspace",
+      "launch_id": "de2045b4-9b17-481e-85a2-4bc6f3265f11",
+      "note": "merge confirmed; Drive handoff restored; continuity merged"
+    }
+  ],
+  "security": {
+    "redaction_policy": "no secrets, tokens, JWTs, or env values in public package",
+    "secrets_in_public_package": false
+  },
+  "audit_dashboard": {
+    "title": "/dashboard \ud83c\udf19 FULL MERGE \u2192 FLEET",
+    "summary_line": "FULL MERGE COMPLETE \u00b7 session 211e2cba-1b23-5ce8-945a-d5e158b037a2 \u00b7 host hds-guydq970hn8i \u00b7 chain 29 \u00b7 bound to https://fleet-ochre-auyuksg.tmp.now/ \u00b7 sandbox SELECTABLE=on \u00b7 secrets redacted"
+  }
+}
