@@ -134,6 +134,45 @@ export async function runDependencyChecks(): Promise<HealthCheck[]> {
         details: { hasNodeEnv: true, service: SERVICE },
       };
     }),
+
+    timeCheck("secrets_presence", async () => {
+      // Presence-only inventory. NEVER include secret values.
+      const names = [
+        "POLYGON_API_KEY",
+        "COINGECKO_PRO_API_KEY",
+        "XAI_API_KEY",
+        "TERMINAL_JWT_VAL",
+        "GROK_SERVER_KEY",
+        "GROVE_TOKEN_ROTATION",
+        "GPG_KEY",
+        "NEXTAUTH_SECRET",
+        "GOOGLE_CLIENT_SECRET",
+        "GITHUB_CLIENT_SECRET",
+        "DISCORD_CLIENT_SECRET",
+        "DATABASE_URL",
+      ];
+      const present = names.filter((k) => Boolean(process.env[k]?.length));
+      const missing = names.filter((k) => !process.env[k]?.length);
+      return {
+        status: "pass",
+        message: `${present.length}/${names.length} optional secrets present (values redacted)`,
+        details: {
+          present_names: present,
+          missing_names: missing,
+          values_exported: false,
+          policy: "presence-only",
+        },
+      };
+    }),
+    timeCheck("mesh_links", async () => {
+      const fleet = process.env.NEXT_PUBLIC_FLEET_LIVE_URL ?? "https://fleet-ochre-auyuksg.tmp.now/";
+      const strand = process.env.NEXT_PUBLIC_STRAND_LIVE ?? "https://strand-osint-mesh.vercel.app";
+      return {
+        status: "pass",
+        message: "Fleet + STRAND public links configured",
+        details: { fleet, strand, framework: `${strand}/framework` },
+      };
+    }),
   ]);
 }
 

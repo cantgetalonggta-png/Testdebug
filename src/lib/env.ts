@@ -30,6 +30,18 @@ const KEYS: Array<Omit<EnvKeyStatus, "set">> = [
   { key: "VERCEL_ENV", group: "deploy", required: false, description: "Vercel environment name" },
   { key: "VERCEL_URL", group: "deploy", required: false, description: "Vercel deployment host" },
   { key: "VERCEL_REGION", group: "deploy", required: false, description: "Vercel region" },
+
+  // Continuity / mesh (presence only — never expose values)
+  { key: "POLYGON_API_KEY", group: "data", required: false, description: "Polygon market data API key (presence only)" },
+  { key: "COINGECKO_PRO_API_KEY", group: "data", required: false, description: "CoinGecko Pro API key (presence only)" },
+  { key: "XAI_API_KEY", group: "data", required: false, description: "xAI API key for live OSINT (presence only)" },
+  { key: "TERMINAL_JWT_VAL", group: "auth", required: false, description: "Terminal JWT (presence only; never returned)" },
+  { key: "GROK_SERVER_KEY", group: "auth", required: false, description: "Grok server key (presence only; never returned)" },
+  { key: "GROVE_TOKEN_ROTATION", group: "auth", required: false, description: "Grove rotation token (presence only)" },
+  { key: "GPG_KEY", group: "auth", required: false, description: "GPG key material (presence only)" },
+  { key: "NEXT_PUBLIC_FLEET_LIVE_URL", group: "app", required: false, description: "Public fleet live URL" },
+  { key: "NEXT_PUBLIC_STRAND_LIVE", group: "app", required: false, description: "Public STRAND mesh URL" },
+  { key: "NEXT_PUBLIC_AUDIT_SCHEMA", group: "app", required: false, description: "Audit schema id" },
 ];
 
 export function inspectEnv(): {
