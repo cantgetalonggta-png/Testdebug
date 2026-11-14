@@ -45,3 +45,17 @@ Health live/ready/deep · Modules PATCH · Services probes · OAuth scaffold · 
 ## Demo
 
 `demo@testdebug.app` / `demo`
+
+
+## Bound continuity deployment (this merge, claim ~58m)
+
+**https://prompt-spruce-8gt5o2f.tmp.now**  
+Claim: https://vercel.com/claim-deployment?code=fd6765e7-3610-4471-bb98-62c091db739c
+
+Verified live:
+- `/api/audit` → merge COMPLETE · chain 29 · redacted
+- `/api/session` → session + Drive + STRAND + fleet keys
+- `/audit/APK_DEEPLINK_AUDIT_DASHBOARD_v1.json` → static snapshot
+
+Canonical project URL (user-specified): https://fleet-ochre-auyuksg.tmp.now/
+GitHub source of truth: https://github.com/cantgetalonggta-png/Testdebug
